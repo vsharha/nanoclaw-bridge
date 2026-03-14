@@ -10,11 +10,13 @@ gh api repos/qwibitai/nanoclaw-telegram/commits/main --jq '.sha'
 gh api repos/qwibitai/nanoclaw-slack/commits/main --jq '.sha'
 gh api repos/qwibitai/nanoclaw-discord/commits/main --jq '.sha'
 gh api repos/qwibitai/nanoclaw-whatsapp/commits/main --jq '.sha'
+gh api repos/1rgs/claude-code-proxy/commits/main --jq '.sha'
 ```
 
-### 2. Compare against current pins in `nanoclaw/entrypoint.sh`
+### 2. Compare against current pins
 
-Check `NANOCLAW_VERSION`, `TELEGRAM_SHA`, `SLACK_SHA`, `DISCORD_SHA`, `WHATSAPP_SHA`.
+- `nanoclaw/entrypoint.sh`: `NANOCLAW_VERSION`, `TELEGRAM_SHA`, `SLACK_SHA`, `DISCORD_SHA`, `WHATSAPP_SHA`
+- `llm-proxy/Dockerfile`: `PROXY_SHA` ARG
 
 If everything is already up to date, report that and stop.
 
@@ -47,9 +49,10 @@ Ignore steps that Docker handles outside the entrypoint: git/fork setup, service
 
 ### 4. Apply updates
 
-- Set `NANOCLAW_VERSION` to the new tag
-- Update whichever channel SHAs changed
+- Set `NANOCLAW_VERSION` to the new tag in `nanoclaw/entrypoint.sh`
+- Update whichever channel SHAs changed in `nanoclaw/entrypoint.sh`
 - Update the date comment on the channel SHAs line to today's date
+- Update `PROXY_SHA` in `llm-proxy/Dockerfile` if it changed
 - Apply any entrypoint changes identified in step 3
 
 ### 5. Report
@@ -60,6 +63,7 @@ TELEGRAM_SHA:     662e81f → a1b2c3d  (updated)
 SLACK_SHA:        102ea64 → 102ea64  (unchanged)
 DISCORD_SHA:      ba9353c → ba9353c  (unchanged)
 WHATSAPP_SHA:     2a2ab2a → 9f8e7d6  (updated)
+PROXY_SHA:        dd4a29a → f1e2d3c  (updated)
 
 Setup skill: changed
   - <brief description of what changed and what was updated in entrypoint.sh>
