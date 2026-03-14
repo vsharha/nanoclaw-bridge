@@ -8,6 +8,8 @@ NanoClaw is a messaging bot (Telegram, Slack, Discord, WhatsApp) that spawns Cla
 
 NanoClaw has a built-in credential proxy that intercepts all API traffic from agent containers. This stack points that proxy at `claude-code-proxy`, which accepts Anthropic-format requests and translates them to your chosen backend. Your real API key never touches NanoClaw.
 
+Normally, setting up NanoClaw involves cloning the repo and running Claude Code with the `/setup` skill, which walks through installing dependencies, merging channel integrations, authenticating, and registering chats — all interactively. This project replaces that flow with a Docker entrypoint that handles everything automatically on startup: cloning and pinning NanoClaw, merging the channel branches you've enabled, building, and writing the required config. The only step that remains interactive is WhatsApp, which requires linking to your account via QR code or pairing code regardless of how NanoClaw is run.
+
 ## Setup
 
 **Prerequisites:** Docker with Compose, a bot token for at least one channel, and an API key for your chosen LLM provider.
@@ -42,11 +44,23 @@ docker compose up --build
 
 On first run, NanoClaw clones itself, merges the channel integrations you enabled, builds, and starts. Subsequent restarts are fast.
 
-**WhatsApp:** The entrypoint merges the WhatsApp integration and writes your config, but WhatsApp requires a QR code scan on first boot. Attach to the container after startup to authenticate:
+### WhatsApp
+
+WhatsApp requires a one-time authentication step that cannot be automated — you need to link the container to your WhatsApp account using either a pairing code or a QR scan.
+
+1. Set `WHATSAPP_ENABLE=true` in `.env`
+2. Optionally set `WHATSAPP_PHONE_NUMBER` (country code, no `+`, e.g. `1234567890`) to use pairing code instead of QR
+3. Run the setup script:
 
 ```bash
-docker compose logs -f nanoclaw   # watch for the QR code
+bash scripts/whatsapp-setup.sh
 ```
+
+The script starts the stack, waits for NanoClaw to be ready, walks you through auth, and restarts. Auth credentials are stored in the `nanoclaw-code` volume and persist across restarts — you only need to do this once.
+
+For chat registration, set `NANOCLAW_MAIN_JID` in `.env` before running the script:
+- Self-chat: `YOUR_NUMBER@s.whatsapp.net`
+- Groups: run `docker compose exec nanoclaw bash -c 'cd /workspace/nanoclaw && npx tsx setup/index.ts --step groups --list'` after auth to get JIDs
 
 ## Upgrading NanoClaw
 

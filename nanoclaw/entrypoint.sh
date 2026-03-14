@@ -98,7 +98,6 @@ EOF
 [ -n "${SLACK_BOT_TOKEN:-}" ]         && echo "SLACK_BOT_TOKEN=${SLACK_BOT_TOKEN}"                 >> .env
 [ -n "${SLACK_APP_TOKEN:-}" ]         && echo "SLACK_APP_TOKEN=${SLACK_APP_TOKEN}"                 >> .env
 [ -n "${DISCORD_BOT_TOKEN:-}" ]       && echo "DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}"             >> .env
-[ -n "${WHATSAPP_ENABLE:-}" ]         && echo "WHATSAPP_ENABLE=${WHATSAPP_ENABLE}"                 >> .env
 [ -n "${CONTAINER_TIMEOUT:-}" ]       && echo "CONTAINER_TIMEOUT=${CONTAINER_TIMEOUT}"             >> .env
 [ -n "${IDLE_TIMEOUT:-}" ]            && echo "IDLE_TIMEOUT=${IDLE_TIMEOUT}"                       >> .env
 [ -n "${MAX_CONCURRENT_CONTAINERS:-}" ] && echo "MAX_CONCURRENT_CONTAINERS=${MAX_CONCURRENT_CONTAINERS}" >> .env

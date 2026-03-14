@@ -14,10 +14,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - nanoclaw-code:/workspace
-      - nanoclaw-store:/app/store
-      - nanoclaw-groups:/app/groups
-      - nanoclaw-data:/app/data
-      - nanoclaw-logs:/app/logs
       - nanoclaw-config:/root/.config/nanoclaw
     ports:
       - "3001:3001"
@@ -29,10 +25,6 @@ services:
 
 volumes:
   nanoclaw-code:
-  nanoclaw-store:
-  nanoclaw-groups:
-  nanoclaw-data:
-  nanoclaw-logs:
   nanoclaw-config:
 
 networks:
