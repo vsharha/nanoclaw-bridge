@@ -1,5 +1,6 @@
 services:
   llm-proxy:
+    container_name: llm-proxy
     build: ./llm-proxy
     env_file: .env
     networks:
@@ -7,6 +8,7 @@ services:
     restart: unless-stopped
 
   nanoclaw:
+    container_name: nanoclaw
     build: ./nanoclaw
     env_file: .env
     environment:

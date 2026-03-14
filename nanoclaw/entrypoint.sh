@@ -45,6 +45,7 @@ merge_channel() {
     fi
 
     echo "[setup] Merging channel: ${channel} (${sha})..."
+    git checkout -- . 2>/dev/null || true
     git fetch "${repo_url}" "${sha}"
     git merge FETCH_HEAD --no-edit || true
 
@@ -112,7 +113,7 @@ ALLOWLIST_DIR="${HOME}/.config/nanoclaw"
 ALLOWLIST_FILE="${ALLOWLIST_DIR}/mount-allowlist.json"
 if [ ! -f "${ALLOWLIST_FILE}" ]; then
     mkdir -p "${ALLOWLIST_DIR}"
-    echo "[]" > "${ALLOWLIST_FILE}"
+    echo '{"allowedRoots":[],"blockedPatterns":[],"nonMainReadOnly":true}' > "${ALLOWLIST_FILE}"
     echo "[setup] Created empty mount-allowlist.json"
 fi
 
