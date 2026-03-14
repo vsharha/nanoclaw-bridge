@@ -29,14 +29,15 @@ Edit `.env`:
 
 For any OpenAI-compatible provider (OpenRouter, Cerebras, Groq, Together, Fireworks, etc.), set `PREFERRED_PROVIDER=openai`, point `OPENAI_BASE_URL` at the provider's API, and use its key as `OPENAI_API_KEY`. Examples:
 
-| Provider   | `OPENAI_BASE_URL`                |
-| ---------- | -------------------------------- |
-| OpenRouter | `https://openrouter.ai/api/v1`   |
-| Cerebras   | `https://api.cerebras.ai/v1`     |
-| Groq       | `https://api.groq.com/openai/v1` |
-| Together   | `https://api.together.xyz/v1`    |
+| Provider   | `OPENAI_BASE_URL`                       |
+| ---------- | --------------------------------------- |
+| OpenRouter | `https://openrouter.ai/api/v1`          |
+| Cerebras   | `https://api.cerebras.ai/v1`            |
+| Groq       | `https://api.groq.com/openai/v1`        |
+| Together   | `https://api.together.xyz/v1`           |
+| Ollama     | `http://host.docker.internal:11434/v1`  |
 
-Set `BIG_MODEL` and `SMALL_MODEL` to model names supported by that provider.
+Set `BIG_MODEL` and `SMALL_MODEL` to model names supported by that provider. For Ollama, use the model names as they appear in `ollama list` (e.g. `llama3.2`, `qwen2.5-coder`). `OPENAI_API_KEY` can be set to any non-empty string — Ollama doesn't validate it.
 
 ```bash
 docker compose up --build
@@ -86,3 +87,15 @@ docker compose logs nanoclaw | grep -E "\[setup\]|Credential proxy"
 ```
 
 Send a message to your bot. Agent containers will appear in `docker ps` as siblings of the NanoClaw container.
+
+## Contributing
+
+The main things that need keeping up with:
+
+- **NanoClaw releases** — when a new version drops, update `NANOCLAW_VERSION` and the channel SHAs in `nanoclaw/entrypoint.sh`, check the upstream setup skill for changes to the startup sequence, and update `entrypoint.sh` accordingly
+- **claude-code-proxy** — if the proxy gains new features or the startup command changes, update `llm-proxy/Dockerfile`
+- **New channels** — NanoClaw channels are separate repos. Adding one follows the same pattern as the existing four: add a pinned SHA constant, a merge step conditioned on the token env var, and the token to the `.env` write block
+
+If you find that the entrypoint diverges from what a fresh NanoClaw install expects, the upstream `/setup` skill at `.claude/skills/setup/SKILL.md` in the NanoClaw repo is the reference for what the startup sequence should do.
+
+Feel free to open a pull request.
