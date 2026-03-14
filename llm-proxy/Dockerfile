@@ -8,7 +8,7 @@ WORKDIR /app
 
 RUN git clone https://github.com/1rgs/claude-code-proxy.git . && git checkout ${PROXY_SHA}
 
-RUN pip install uv && uv sync --locked
+RUN pip install uv && uv sync
 
 EXPOSE 8082
 
