@@ -1,0 +1,40 @@
+services:
+  llm-proxy:
+    build: ./llm-proxy
+    env_file: .env
+    networks:
+      - nanoclaw-net
+    restart: unless-stopped
+
+  nanoclaw:
+    build: ./nanoclaw
+    env_file: .env
+    environment:
+      CREDENTIAL_PROXY_HOST: "0.0.0.0"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - nanoclaw-code:/workspace
+      - nanoclaw-store:/app/store
+      - nanoclaw-groups:/app/groups
+      - nanoclaw-data:/app/data
+      - nanoclaw-logs:/app/logs
+      - nanoclaw-config:/root/.config/nanoclaw
+    ports:
+      - "3001:3001"
+    depends_on:
+      - llm-proxy
+    networks:
+      - nanoclaw-net
+    restart: unless-stopped
+
+volumes:
+  nanoclaw-code:
+  nanoclaw-store:
+  nanoclaw-groups:
+  nanoclaw-data:
+  nanoclaw-logs:
+  nanoclaw-config:
+
+networks:
+  nanoclaw-net:
+    driver: bridge
