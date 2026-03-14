@@ -42,9 +42,23 @@ docker compose up --build
 
 On first run, NanoClaw clones itself, merges the channel integrations you enabled, builds, and starts. Subsequent restarts are fast.
 
+**WhatsApp:** The entrypoint merges the WhatsApp integration and writes your config, but WhatsApp requires a QR code scan on first boot. Attach to the container after startup to authenticate:
+
+```bash
+docker compose logs -f nanoclaw   # watch for the QR code
+```
+
 ## Upgrading NanoClaw
 
-Update `NANOCLAW_VERSION` and the channel SHAs in `nanoclaw/entrypoint.sh`, then rebuild with `docker compose up --build`. The entrypoint detects the version mismatch, re-clones, and rebuilds.
+Update `NANOCLAW_VERSION` and the channel SHAs in `nanoclaw/entrypoint.sh`, then rebuild:
+
+```bash
+docker compose up --build
+```
+
+The entrypoint detects the version mismatch, re-clones, and rebuilds. Also check whether the `.env` write block or startup steps in `entrypoint.sh` need updating for the new version.
+
+> If you have Claude Code, run `/update-nanoclaw` from this directory. It fetches the latest versions, diffs the upstream setup process, and updates `entrypoint.sh` automatically.
 
 ## Verifying
 
