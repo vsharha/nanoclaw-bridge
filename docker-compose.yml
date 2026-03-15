@@ -15,7 +15,8 @@ services:
       CREDENTIAL_PROXY_HOST: "0.0.0.0"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - nanoclaw-code:/workspace
+      - ${NANOCLAW_DATA_DIR:-/var/lib/nanoclaw}:${NANOCLAW_DATA_DIR:-/var/lib/nanoclaw}
+      # When NANOCLAW_AGENT_HOME=/home/youruser, add: - /home/youruser:/home/youruser:ro
       - nanoclaw-config:/root/.config/nanoclaw
     ports:
       - "3001:3001"
@@ -26,7 +27,6 @@ services:
     restart: unless-stopped
 
 volumes:
-  nanoclaw-code:
   nanoclaw-config:
 
 networks:
